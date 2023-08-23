@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -85,5 +86,15 @@ class ClientApiController extends Controller
             return $this->sendError([], $e->getMessage(), 500);
         }
         return $this->sendResponse($user, "user data retrieved", 200);
+    }
+    /**
+     * List of books
+     * */
+    public function books(): JsonResponse
+    {
+        $getAllBooks = Book::paginate(10);
+        return response()->json([
+           'pageData'   => $getAllBooks
+        ]);
     }
 }

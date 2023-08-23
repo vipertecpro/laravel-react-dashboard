@@ -35,13 +35,20 @@ Route::group([
     'as' => 'client.',
     'prefix' => 'client'
 ], function () {
-    Route::post('/register', [ClientApiController::class, 'register'])->name('register');
     Route::post('/login', [ClientApiController::class, 'login'])->name('login');
+    Route::post('/register', [ClientApiController::class, 'register'])->name('register');
     Route::get('/user', [ClientApiController::class, 'getUser'])->name('user');
     Route::middleware('jwt.verify')->group(function() {
         Route::get('/test', function() {
             return response()->json(['message' => 'Welcome to dashboard'], 200);
         })->name('testJwt');
-        Route::get('/bookCategories', [ClientApiController::class, 'bookCategories'])->name('bookCategories');
     });
+
+    Route::get('/books', [ClientApiController::class, 'books'])->name('books');
+    Route::get('/book/{book_id}', [ClientApiController::class, 'getSingleBookData'])->name('getSingleBookData');
+    Route::get('/book/{book_id}/bookReviews', [ClientApiController::class, 'singleBookReviews'])->name('singleBookReviews');
+
+
+    Route::post('/createBook', [ClientApiController::class, 'createBook'])->name('createBook');
+    Route::post('/createBookReview', [ClientApiController::class, 'createBookReview'])->name('createBookReview');
 });
