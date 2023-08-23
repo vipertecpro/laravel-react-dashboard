@@ -93,11 +93,8 @@ class PermissionController extends Controller
     /**
      * Remove Permission
      * */
-    public function remove(Request $request){
-        $request->validate([
-            'id' => 'required',
-        ]);
-        Permission::where('id',$request->get('id'))->delete();
+    public function remove($permission_id){
+        Permission::where('id',$permission_id)->delete();
         return redirect()->route('dashboard.global.permissions.list');
     }
 }

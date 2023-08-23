@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('book_reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->index()->unique();
-            $table->string('slug')->index()->unique();
-            $table->unsignedBigInteger('author_id')->index();
-            $table->unsignedBigInteger('created_by')->default(0);
+            $table->longText('content');
+            $table->unsignedBigInteger('rating')->index();
+            $table->enum('status',[
+                'under_process',
+                'approved'
+            ])->default('under_process');
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('book_id');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('book_reviews');
     }
 };

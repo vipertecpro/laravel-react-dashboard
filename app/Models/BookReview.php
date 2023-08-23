@@ -10,9 +10,10 @@ class BookReview extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'title',
-        'subtitle',
-        'slug',
+        'content',
+        'rating',
+        'status',
         'created_by',
+        'book_id',
     ];
 }

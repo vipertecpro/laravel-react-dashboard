@@ -5,11 +5,15 @@ namespace App\Http\Controllers\be;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BlogCategoriesResource;
 use App\Http\Resources\BookCategoryResource;
+use App\Http\Resources\BookResource;
+use App\Http\Resources\BookReviewResource;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\Models\BlogCategory;
+use App\Models\Book;
 use App\Models\BookCategory;
+use App\Models\BookReview;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -93,6 +97,56 @@ class ApiController extends Controller
                                 ->orWhere('is_active', 'like', $searchQuery);
         }
         return RoleResource::collection($query->paginate((int)$perPage));
+    }
+    /**
+     * Display the books list.
+     */
+    public function books(Request $request): AnonymousResourceCollection
+    {
+        $sortFields         = ['id','title', 'slug', 'ISBN_10', 'ISBN_13', 'author', 'created_by', 'created_at', 'updated_at'];
+        $PER_PAGE           = 10;
+        $DEFAULT_SORT_FIELD = 'created_at';
+        $DEFAULT_SORT_ORDER = 'desc';
+        $sortFieldInput = $request->input('sort_field', $DEFAULT_SORT_FIELD);
+        $sortField      = in_array($sortFieldInput, $sortFields) ? $sortFieldInput : $DEFAULT_SORT_ORDER;
+        $sortOrder      = $request->input('sort_order', $DEFAULT_SORT_ORDER);
+        $searchInput    = $request->input('search');
+        $query          = Book::orderBy($sortField, $sortOrder);
+        $perPage        = $request->input('per_page') ?? $PER_PAGE;
+        if (!is_null($searchInput)) {
+            $searchQuery = "%$searchInput%";
+            $query       = $query->where('title', 'like', $searchQuery)
+                ->orWhere('slug', 'like', $searchQuery)
+                ->orWhere('ISBN_10', 'like', $searchQuery)
+                ->orWhere('ISBN_13', 'like', $searchQuery)
+                ->orWhere('author', 'like', $searchQuery);
+        }
+        return BookResource::collection($query->paginate((int)$perPage));
+    }
+    /**
+     * Display the book reviews list.
+     */
+    public function bookReviews(Request $request): AnonymousResourceCollection
+    {
+        $sortFields         = ['id','content', 'rating', 'status', 'book_id','created_by', 'created_at', 'updated_at'];
+        $PER_PAGE           = 10;
+        $DEFAULT_SORT_FIELD = 'created_at';
+        $DEFAULT_SORT_ORDER = 'desc';
+        $sortFieldInput = $request->input('sort_field', $DEFAULT_SORT_FIELD);
+        $sortField      = in_array($sortFieldInput, $sortFields) ? $sortFieldInput : $DEFAULT_SORT_ORDER;
+        $sortOrder      = $request->input('sort_order', $DEFAULT_SORT_ORDER);
+        $searchInput    = $request->input('search');
+        $query          = BookReview::orderBy($sortField, $sortOrder);
+        $perPage        = $request->input('per_page') ?? $PER_PAGE;
+        if (!is_null($searchInput)) {
+            $searchQuery = "%$searchInput%";
+            $query       = $query->where('title', 'like', $searchQuery)
+                ->orWhere('slug', 'like', $searchQuery)
+                ->orWhere('ISBN_10', 'like', $searchQuery)
+                ->orWhere('ISBN_13', 'like', $searchQuery)
+                ->orWhere('author', 'like', $searchQuery);
+        }
+        return BookReviewResource::collection($query->paginate((int)$perPage));
     }
 
 }

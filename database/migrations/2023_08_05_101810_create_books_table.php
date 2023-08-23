@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->index()->unique();
             $table->string('ISBN_10')->index()->unique();
             $table->string('ISBN_13')->index()->unique();
-            $table->unsignedBigInteger('author_id')->index();
+            $table->string('author')->index();
             $table->unsignedBigInteger('created_by')->default(0);
             $table->softDeletes();
             $table->timestamps();

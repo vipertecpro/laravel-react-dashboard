@@ -99,16 +99,6 @@ Route::group([
             'prefix' => '/be',
         ], function () {
             Route::group([
-                'as' => 'customers.',
-                'prefix' => 'customers'
-            ], function () {
-                Route::get('/list', [CustomersController::class, 'list'])->name('list');
-                Route::get('/create', [CustomersController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [CustomersController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [CustomersController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [CustomersController::class, 'remove'])->name('remove');
-            });
-            Route::group([
                 'as' => 'books.',
                 'prefix' => 'books'
             ], function () {
@@ -119,8 +109,8 @@ Route::group([
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
             });
             Route::group([
-                'as' => 'booksReviews.',
-                'prefix' => 'booksReviews'
+                'as' => 'bookReviews.',
+                'prefix' => 'bookReviews'
             ], function () {
                 Route::get('/list', [BookReviewsController::class, 'list'])->name('list');
                 Route::get('/create', [BookReviewsController::class, 'create'])->name('create');

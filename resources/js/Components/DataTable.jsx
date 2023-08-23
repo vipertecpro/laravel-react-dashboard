@@ -15,7 +15,7 @@ const DataTable = ({excludedColumns,fetchUrl, columns, actionUrls}) => {
     const [data, setData] = useState([])
     const [perPage, setPerPage] = useState(10)
     const [sortColumn, setSortColumn] = useState(columns[0])
-    const [sortOrder, setSortOrder] = useState("asc")
+    const [sortOrder, setSortOrder] = useState("desc")
     const [search, setSearch] = useState("")
     const [pagination, setPagination] = useState({})
     const [currentPage, setCurrentPage] = useState(1)

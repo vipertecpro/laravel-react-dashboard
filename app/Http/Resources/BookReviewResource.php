@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-class BookCategoryResource extends JsonResource
+class BookReviewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +18,11 @@ class BookCategoryResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'name'          => Str::limit($this->name,10),
-            'slug'          => Str::limit($this->slug,10),
-            'description'   => Str::limit($this->description,10),
-            'is_active'     => $this->is_active,
-            'parent_id'     => $this->parent_id,
+            'content'       => Str::words($this->content,5),
+            'rating'        => $this->rating,
+            'status'        => $this->status,
+            'created_by'    => $this->created_by,
+            'book_id'       => $this->book_id,
             'created_at'    => Carbon::parse($this->created_at)->toDayDateTimeString(),
             'updated_at'    => Carbon::parse($this->updated_at)->toDayDateTimeString(),
         ];

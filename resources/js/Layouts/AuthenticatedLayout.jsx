@@ -18,7 +18,7 @@ const mainMenu = [
 ]
 const subMenu = [
     {id: 1, name: 'Books', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
-    {id: 2, name: 'Reviews', href: '/dashboard/be/booksReviews/list', initial: 'B', routeName: 'dashboard.be.booksReviews.list'},
+    {id: 2, name: 'Reviews', href: '/dashboard/be/bookReviews/list', initial: 'B', routeName: 'dashboard.be.bookReviews.list'},
 ]
 
 function classNames(...classes) {

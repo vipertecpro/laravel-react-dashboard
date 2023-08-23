@@ -96,11 +96,8 @@ class RoleController extends Controller
     /**
      * Remove Role
      * */
-    public function remove(Request $request){
-        $request->validate([
-            'id' => 'required',
-        ]);
-        Role::where('id',$request->get('id'))->delete();
+    public function remove($role_id){
+        Role::where('id',$role_id)->delete();
         return redirect()->route('dashboard.global.roles.list');
     }
 }

@@ -42,7 +42,7 @@ class UserController extends Controller
                 'pageTitle' => 'Create User',
                 'pageDescription' => '',
                 'pageData' => null,
-                'rolesList' => Role::where('slug','!=','dev__admin')->get(),
+                'rolesList' => Role::where('slug','!=','admin')->get(),
                 'formUrl' => route('dashboard.global.users.storeUpdate')
             ]);
         }catch (Exception $exception){
@@ -62,7 +62,7 @@ class UserController extends Controller
                 'pageTitle' => 'Edit User',
                 'pageDescription' => '',
                 'pageData' => $getUserInfo,
-                'rolesList' => Role::where('slug','!=','dev__admin')->get(),
+                'rolesList' => Role::where('slug','!=','admin')->get(),
                 'formUrl' => route('dashboard.global.users.storeUpdate',$userId)
             ]);
         }catch (Exception $exception){
@@ -94,11 +94,8 @@ class UserController extends Controller
     /**
      * Remove User
      * */
-    public function remove(Request $request){
-        $request->validate([
-            'id' => 'required',
-        ]);
-        User::where('id',$request->get('id'))->delete();
+    public function remove($user_id){
+        User::where('id',$user_id)->delete();
         return redirect()->route('dashboard.global.users.list');
     }
 }
