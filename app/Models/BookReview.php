@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BlogCategory extends Model
+class BookReview extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     protected $fillable = [
-        'icon_file_path',
-        'name',
+        'title',
+        'subtitle',
         'slug',
-        'description',
-        'parent_id',
-        'is_active',
+        'created_by',
     ];
 }

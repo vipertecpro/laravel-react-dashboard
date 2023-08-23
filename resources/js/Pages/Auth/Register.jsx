@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ApplicationLogo from "@/Components/ApplicationLogo.jsx";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -29,7 +30,23 @@ export default function Register() {
     return (
         <GuestLayout>
             <Head title="Register" />
-
+            <div className={'my-5'}>
+                <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                    <Link href={'/'}>
+                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500 mx-auto" />
+                    </Link>
+                    <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                        Register new account
+                    </h2>
+                    <div className={`flex gap-2 mx-auto justify-center my-2`}>
+                        <p>Already a member ?</p>
+                        <Link href={'/login'} className={'text-blue-500'}>
+                            Click Here
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
@@ -98,20 +115,13 @@ export default function Register() {
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ml-4" disabled={processing}>
+                <div className={`my-5`}>
+                    <PrimaryButton className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" disabled={processing}>
                         Register
                     </PrimaryButton>
                 </div>
             </form>
+            </div>
         </GuestLayout>
     );
 }

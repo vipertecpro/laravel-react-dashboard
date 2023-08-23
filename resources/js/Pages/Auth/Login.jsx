@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import {Head, Link, useForm} from '@inertiajs/react';
+import ApplicationLogo from "@/Components/ApplicationLogo.jsx";
 
 export default function Login({status, canResetPassword}) {
     const {data, setData, post, processing, errors, reset} = useForm({
@@ -29,7 +30,25 @@ export default function Login({status, canResetPassword}) {
     return (
         <GuestLayout>
             <Head title="Log in"/>
+
+            <div className={'my-5'}>
+                <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                    <Link href={'/'}>
+                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500 mx-auto" />
+                    </Link>
+                    <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                        Sign in to your account
+                    </h2>
+                    <div className={`flex gap-2 mx-auto justify-center my-2`}>
+                        <p>Need new account ?</p>
+                        <Link href={'/register'} className={'text-blue-500'}>
+                            Click Here
+                        </Link>
+                    </div>
+                </div>
+            </div>
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+
             <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
                 <form onSubmit={submit} className="space-y-6">
                     <div>

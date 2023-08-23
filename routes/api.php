@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::group([
     'as' => 'fetch.',
     'prefix' => 'fetch'
@@ -26,13 +27,19 @@ Route::group([
     Route::get('/users', [ApiController::class, 'users'])->name('users');
     Route::get('/permissions', [ApiController::class, 'permissions'])->name('permissions');
     Route::get('/roles', [ApiController::class, 'roles'])->name('roles');
-    Route::get('/bookCategories', [ApiController::class, 'bookCategories'])->name('bookCategories');
-    Route::get('/blogCategories', [ApiController::class, 'blogCategories'])->name('blogCategories');
 });
 
 Route::group([
     'as' => 'client.',
     'prefix' => 'client'
 ], function () {
-    Route::get('/bookCategories', [ClientApiController::class, 'bookCategories'])->name('bookCategories');
+    Route::post('/register', [ClientApiController::class, 'register'])->name('register');
+    Route::post('/login', [ClientApiController::class, 'login'])->name('login');
+    Route::get('/user', [ClientApiController::class, 'getUser'])->name('user');
+    Route::middleware('jwt.verify')->group(function() {
+        Route::get('/test', function() {
+            return response()->json(['message' => 'Welcome to dashboard'], 200);
+        })->name('testJwt');
+        Route::get('/bookCategories', [ClientApiController::class, 'bookCategories'])->name('bookCategories');
+    });
 });

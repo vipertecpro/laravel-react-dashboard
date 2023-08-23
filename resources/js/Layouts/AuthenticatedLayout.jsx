@@ -1,13 +1,12 @@
-// import { useState } from 'react';
 import Dropdown from '@/Components/Dropdown';
 import {Link} from '@inertiajs/react';
 import {Fragment, useState} from 'react'
 import {Dialog, Menu, Transition} from '@headlessui/react'
 import {
-    Bars3Icon, BellIcon, ChartPieIcon, Cog6ToothIcon, HomeIcon, UsersIcon, XMarkIcon,
+    Bars3Icon, BellIcon, Cog6ToothIcon, HomeIcon, UsersIcon, XMarkIcon,
 } from '@heroicons/react/24/outline'
 import {
-    ChevronDownIcon, CurrencyDollarIcon, ListBulletIcon, MagnifyingGlassIcon, ShieldCheckIcon, ShoppingCartIcon, UserGroupIcon, UserPlusIcon
+    ChevronDownIcon,  MagnifyingGlassIcon, ShieldCheckIcon, UserGroupIcon
 } from '@heroicons/react/20/solid'
 import {v1 as uuidv1} from "uuid";
 
@@ -16,21 +15,10 @@ const mainMenu = [
     {id: 2,name: 'Users', href: '/dashboard/global/users/list', icon: UserGroupIcon, routeName: 'dashboard.global.users.list'},
     {id: 3,name: 'Permissions', href: '/dashboard/global/permissions/list', icon: ShieldCheckIcon, routeName: 'dashboard.global.permissions.list'},
     {id: 4,name: 'Roles', href: '/dashboard/global/roles/list', icon: UsersIcon, routeName: 'dashboard.global.roles.list'},
-    // {id: 5,name: 'Sections', href: '/dashboard/global/sections/list', icon: ChartPieIcon, routeName: 'dashboard.global.sections.list'},
-    // {id: 6,name: 'Pages', href: '/dashboard/global/pages/list', icon: ListBulletIcon, routeName: 'dashboard.global.pages.list'},
-    // {id: 7,name: 'Testimonials', href: '/dashboard/global/testimonials/list', icon: UserPlusIcon, routeName: 'dashboard.global.testimonials.list'},
-    // {id: 8,name: 'Orders', href: '/dashboard/global/orders/list', icon: ShoppingCartIcon, routeName: 'dashboard.global.orders.list'},
-    // {id: 9,name: 'Payments',href: '/dashboard/global/payments/list',icon: CurrencyDollarIcon,routeName: 'dashboard.global.payments.list'},
 ]
 const subMenu = [
-    // {id: 1, name: 'Customers', href: '/dashboard/be/customers/list', initial: 'C', routeName: 'dashboard.be.customers.list'},
-    // {id: 2, name: 'Book Categories', href: '/dashboard/be/bookCategories/list', initial: 'BC', routeName: 'dashboard.be.bookCategories.list'},
-    // {id: 3, name: 'Book Tags', href: '/dashboard/be/bookTags/list', initial: 'BT', routeName: 'dashboard.be.bookTags.list'},
-    // {id: 4, name: 'Books', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
-    {id: 1, name: 'Comments', href: '/dashboard/be/comments/list', initial: 'C', routeName: 'dashboard.be.comments.list'},
-    {id: 2, name: 'Blog Categories', href: '/dashboard/be/blogCategories/list', initial: 'BC', routeName: 'dashboard.be.blogCategories.list'},
-    {id: 3, name: 'Blog Tags', href: '/dashboard/be/blogTags/list', initial: 'BT', routeName: 'dashboard.be.blogTags.list'},
-    {id: 4, name: 'Blogs', href: '/dashboard/be/blogs/list', initial: 'B', routeName: 'dashboard.be.blogs.list'},
+    {id: 1, name: 'Books', href: '/dashboard/be/books/list', initial: 'B', routeName: 'dashboard.be.books.list'},
+    {id: 2, name: 'Reviews', href: '/dashboard/be/booksReviews/list', initial: 'B', routeName: 'dashboard.be.booksReviews.list'},
 ]
 
 function classNames(...classes) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\be\BlogCategoriesController;
 use App\Http\Controllers\be\BlogsController;
 use App\Http\Controllers\be\BlogTagsController;
 use App\Http\Controllers\be\BookCategoriesController;
+use App\Http\Controllers\be\BookReviewsController;
 use App\Http\Controllers\be\BooksController;
 use App\Http\Controllers\be\BookTagsController;
 use App\Http\Controllers\be\CommentsController;
@@ -91,56 +92,6 @@ Route::group([
                 Route::patch('/storeUpdate/{id?}', [RoleController::class, 'storeUpdate'])->name('storeUpdate');
                 Route::get('/remove/{id}', [RoleController::class, 'remove'])->name('remove');
             });
-            Route::group([
-                'as' => 'sections.',
-                'prefix' => 'sections'
-            ], function () {
-                Route::get('/list', [SectionController::class, 'list'])->name('list');
-                Route::get('/create', [SectionController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [SectionController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [SectionController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [SectionController::class, 'remove'])->name('remove');
-            });
-            Route::group([
-                'as' => 'pages.',
-                'prefix' => 'pages'
-            ], function () {
-                Route::get('/list', [PageController::class, 'list'])->name('list');
-                Route::get('/create', [PageController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [PageController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [PageController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [PageController::class, 'remove'])->name('remove');
-            });
-            Route::group([
-                'as' => 'testimonials.',
-                'prefix' => 'testimonials'
-            ], function () {
-                Route::get('/list', [TestimonialsController::class, 'list'])->name('list');
-                Route::get('/create', [TestimonialsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [TestimonialsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [TestimonialsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [TestimonialsController::class, 'remove'])->name('remove');
-            });
-            Route::group([
-                'as' => 'orders.',
-                'prefix' => 'orders'
-            ], function () {
-                Route::get('/list', [OrdersController::class, 'list'])->name('list');
-                Route::get('/create', [OrdersController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [OrdersController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [OrdersController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [OrdersController::class, 'remove'])->name('remove');
-            });
-            Route::group([
-                'as' => 'payments.',
-                'prefix' => 'payments'
-            ], function () {
-                Route::get('/list', [PaymentsController::class, 'list'])->name('list');
-                Route::get('/create', [PaymentsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [PaymentsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [PaymentsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [PaymentsController::class, 'remove'])->name('remove');
-            });
         });
 
         Route::group([
@@ -158,27 +109,6 @@ Route::group([
                 Route::get('/remove/{id}', [CustomersController::class, 'remove'])->name('remove');
             });
             Route::group([
-                'as' => 'bookCategories.',
-                'prefix' => 'bookCategories'
-            ], function () {
-                Route::get('/list', [BookCategoriesController::class, 'list'])->name('list');
-                Route::get('/create', [BookCategoriesController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [BookCategoriesController::class, 'edit'])->name('edit');
-                Route::post('/storeUpdate/{id?}', [BookCategoriesController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [BookCategoriesController::class, 'remove'])->name('remove');
-                Route::get('/removeAll', [BookCategoriesController::class, 'removeAll'])->name('removeAll');
-            });
-            Route::group([
-                'as' => 'bookTags.',
-                'prefix' => 'bookTags'
-            ], function () {
-                Route::get('/list', [BookTagsController::class, 'list'])->name('list');
-                Route::get('/create', [BookTagsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [BookTagsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [BookTagsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [BookTagsController::class, 'remove'])->name('remove');
-            });
-            Route::group([
                 'as' => 'books.',
                 'prefix' => 'books'
             ], function () {
@@ -189,47 +119,15 @@ Route::group([
                 Route::get('/remove/{id}', [BooksController::class, 'remove'])->name('remove');
             });
             Route::group([
-                'as' => 'comments.',
-                'prefix' => 'comments'
+                'as' => 'booksReviews.',
+                'prefix' => 'booksReviews'
             ], function () {
-                Route::get('/list', [CommentsController::class, 'list'])->name('list');
-                Route::get('/create', [CommentsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [CommentsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [CommentsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [CommentsController::class, 'remove'])->name('remove');
+                Route::get('/list', [BookReviewsController::class, 'list'])->name('list');
+                Route::get('/create', [BookReviewsController::class, 'create'])->name('create');
+                Route::get('/edit/{id}', [BookReviewsController::class, 'edit'])->name('edit');
+                Route::patch('/storeUpdate/{id?}', [BookReviewsController::class, 'storeUpdate'])->name('storeUpdate');
+                Route::get('/remove/{id}', [BookReviewsController::class, 'remove'])->name('remove');
             });
-            Route::group([
-                'as' => 'blogCategories.',
-                'prefix' => 'blogCategories'
-            ], function () {
-                Route::get('/list', [BlogCategoriesController::class, 'list'])->name('list');
-                Route::get('/create', [BlogCategoriesController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [BlogCategoriesController::class, 'edit'])->name('edit');
-                Route::post('/storeUpdate/{id?}', [BlogCategoriesController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [BlogCategoriesController::class, 'remove'])->name('remove');
-                Route::get('/removeAll', [BlogCategoriesController::class, 'removeAll'])->name('removeAll');
-            });
-            Route::group([
-                'as' => 'blogTags.',
-                'prefix' => 'blogTags'
-            ], function () {
-                Route::get('/list', [BlogTagsController::class, 'list'])->name('list');
-                Route::get('/create', [BlogTagsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [BlogTagsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [BlogTagsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [BlogTagsController::class, 'remove'])->name('remove');
-            });
-            Route::group([
-                'as' => 'blogs.',
-                'prefix' => 'blogs'
-            ], function () {
-                Route::get('/list', [BlogsController::class, 'list'])->name('list');
-                Route::get('/create', [BlogsController::class, 'create'])->name('create');
-                Route::get('/edit/{id}', [BlogsController::class, 'edit'])->name('edit');
-                Route::patch('/storeUpdate/{id?}', [BlogsController::class, 'storeUpdate'])->name('storeUpdate');
-                Route::get('/remove/{id}', [BlogsController::class, 'remove'])->name('remove');
-            });
-
         });
     });
 });

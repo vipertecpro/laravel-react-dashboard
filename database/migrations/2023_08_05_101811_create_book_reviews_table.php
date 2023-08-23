@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('slug');
-            $table->string('is_active');
-            $table->string('layout');
+            $table->string('title')->index()->unique();
+            $table->string('slug')->index()->unique();
+            $table->unsignedBigInteger('author_id')->index();
+            $table->unsignedBigInteger('created_by')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('books');
     }
 };
