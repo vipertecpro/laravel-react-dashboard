@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\be;
+namespace App\Http\Controllers\Be;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BlogCategoriesResource;
-use App\Http\Resources\BookCategoryResource;
 use App\Http\Resources\BookResource;
 use App\Http\Resources\BookReviewResource;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
-use App\Models\BlogCategory;
 use App\Models\Book;
-use App\Models\BookCategory;
 use App\Models\BookReview;
 use App\Models\Permission;
 use App\Models\Role;

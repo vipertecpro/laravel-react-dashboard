@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\be\ApiController;
-use App\Http\Controllers\client\ClientApiController;
+use App\Http\Controllers\Be\ApiController;
+use App\Http\Controllers\Client\ClientApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::get('endpoint',function(){
+   return true;
+});
 Route::group([
     'as' => 'fetch.',
     'prefix' => 'fetch'

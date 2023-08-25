@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -90,11 +91,31 @@ class ClientApiController extends Controller
     /**
      * List of books
      * */
-    public function books(): JsonResponse
+    public function books(Request $request): JsonResponse
     {
-        $getAllBooks = Book::paginate(10);
+        $sortFields         = ['id','title', 'slug', 'ISBN_10', 'ISBN_13', 'author', 'created_by', 'created_at', 'updated_at'];
+        $PER_PAGE           = 10;
+        $DEFAULT_SORT_FIELD = 'created_at';
+        $DEFAULT_SORT_ORDER = 'desc';
+        $sortFieldInput = $request->input('sort_field', $DEFAULT_SORT_FIELD);
+        $sortField      = in_array($sortFieldInput, $sortFields) ? $sortFieldInput : $DEFAULT_SORT_ORDER;
+        $sortOrder      = $request->input('sort_order', $DEFAULT_SORT_ORDER);
+        $searchInput    = $request->input('search');
+        $query          = Book::withCount('bookReviews')
+                              ->withAvg('bookReviews', 'rating')
+                              ->with('createdBy:id,name')
+                              ->orderBy($sortField, $sortOrder);
+        $perPage        = $request->input('per_page') ?? $PER_PAGE;
+        if (!is_null($searchInput)) {
+            $searchQuery = "%$searchInput%";
+            $query       = $query->where('title', 'like', $searchQuery)
+                ->orWhere('slug', 'like', $searchQuery)
+                ->orWhere('ISBN_10', 'like', $searchQuery)
+                ->orWhere('ISBN_13', 'like', $searchQuery)
+                ->orWhere('author', 'like', $searchQuery);
+        }
         return response()->json([
-           'pageData'   => $getAllBooks
+           'pageData'   => $query->paginate((int)$perPage)
         ]);
     }
 }

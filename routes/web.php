@@ -1,25 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\be\BlogCategoriesController;
-use App\Http\Controllers\be\BlogsController;
-use App\Http\Controllers\be\BlogTagsController;
-use App\Http\Controllers\be\BookCategoriesController;
-use App\Http\Controllers\be\BookReviewsController;
-use App\Http\Controllers\be\BooksController;
-use App\Http\Controllers\be\BookTagsController;
-use App\Http\Controllers\be\CommentsController;
-use App\Http\Controllers\be\CustomersController;
-use App\Http\Controllers\global\GlobalSettingController;
-use App\Http\Controllers\global\OrdersController;
-use App\Http\Controllers\global\PageController;
-use App\Http\Controllers\global\PaymentsController;
-use App\Http\Controllers\global\PermissionController;
-use App\Http\Controllers\global\ProfileController;
-use App\Http\Controllers\global\RoleController;
-use App\Http\Controllers\global\SectionController;
-use App\Http\Controllers\global\TestimonialsController;
-use App\Http\Controllers\global\UserController;
+use App\Http\Controllers\Be\BookReviewsController;
+use App\Http\Controllers\Be\BooksController;
+use App\Http\Controllers\Global\GlobalSettingController;
+use App\Http\Controllers\Global\PermissionController;
+use App\Http\Controllers\Global\ProfileController;
+use App\Http\Controllers\Global\RoleController;
+use App\Http\Controllers\Global\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
