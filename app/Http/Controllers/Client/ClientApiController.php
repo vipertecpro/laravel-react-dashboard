@@ -94,7 +94,7 @@ class ClientApiController extends Controller
     public function books(Request $request): JsonResponse
     {
         $sortFields         = ['id','title', 'slug', 'ISBN_10', 'ISBN_13', 'author', 'created_by', 'created_at', 'updated_at'];
-        $PER_PAGE           = 10;
+        $PER_PAGE           = 8;
         $DEFAULT_SORT_FIELD = 'created_at';
         $DEFAULT_SORT_ORDER = 'desc';
         $sortFieldInput = $request->input('sort_field', $DEFAULT_SORT_FIELD);
@@ -116,6 +116,17 @@ class ClientApiController extends Controller
         }
         return response()->json([
            'pageData'   => $query->paginate((int)$perPage)
+        ]);
+    }
+
+    public function getSingleBookData($book_slug): JsonResponse
+    {
+        $book = Book::withCount('bookReviews')->withAvg('bookReviews', 'rating')->with('createdBy:id,name')->where('slug',$book_slug)->first();
+        return response()->json([
+           'pageData' => [
+               'book' => $book,
+               'bookReviews' => $book->bookReviews()->paginate(10)
+           ]
         ]);
     }
 }

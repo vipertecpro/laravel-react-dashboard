@@ -47,8 +47,8 @@ Route::group([
     });
 
     Route::get('/books', [ClientApiController::class, 'books'])->name('books');
-    Route::get('/book/{book_id}', [ClientApiController::class, 'getSingleBookData'])->name('getSingleBookData');
-    Route::get('/book/{book_id}/bookReviews', [ClientApiController::class, 'singleBookReviews'])->name('singleBookReviews');
+    Route::get('/book/{book_slug}', [ClientApiController::class, 'getSingleBookData'])->name('getSingleBookData');
+    Route::get('/book/{book_slug}/bookReviews', [ClientApiController::class, 'singleBookReviews'])->name('singleBookReviews');
 
 
     Route::post('/createBook', [ClientApiController::class, 'createBook'])->name('createBook');

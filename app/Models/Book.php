@@ -22,7 +22,7 @@ class Book extends Model
     ];
     public function bookReviews(): HasMany
     {
-        return $this->hasMany(BookReview::class);
+        return $this->hasMany(BookReview::class)->with(['createdBy']);
     }
     public function getBookReviewsAvgRatingAttribute($value): string
     {
