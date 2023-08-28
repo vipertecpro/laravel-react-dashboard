@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Models\User;
+use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -43,7 +51,7 @@ class ClientApiController extends Controller
             'password' => 'required|min:8',
             'c_password' => 'required|same:password',
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError($validator->errors(), 'Validation Error', 422);
         }
         $input['password'] = bcrypt($input['password']);
@@ -52,28 +60,73 @@ class ClientApiController extends Controller
         return $this->sendResponse($success, 'user registered successfully', 201);
 
     }
+    /**
+     * Ensure the login request is not rate limited.
+     *
+     */
+    public function ensureIsNotRateLimited(Request $request): bool|array
+    {
+        $checkRateLimiter = RateLimiter::tooManyAttempts($this->throttleKey($request), 5);
+        if ($checkRateLimiter) {
+            event(new Lockout($request));
+            return [
+                'seconds' => RateLimiter::availableIn($this->throttleKey($request))
+            ];
+        }
+        return false;
+    }
 
+    /**
+     * Get the rate limiting throttle key for the request.
+     */
+    public function throttleKey(Request $request): string
+    {
+        return Str::transliterate(Str::lower($request->get('email')).'|'.$request->ip());
+    }
+    /**
+     * @throws ValidationException
+     */
     public function login(Request $request): JsonResponse
     {
-        $input = $request->only('email', 'password');
-        $validator = Validator::make($input, [
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-        if($validator->fails()){
-            return $this->sendError($validator->errors(), 'Validation Error', 422);
-        }
         try {
-            if (! $token = JWTAuth::attempt($input)) {
-                return $this->sendError([], "invalid login credentials", 400);
+            $input = $request->only('email', 'password');
+            $validator = Validator::make($input, [
+                'email' => 'required',
+                'password' => 'required',
+            ]);
+            if($validator->fails()){
+                return response()->json([
+                    'errors' => $validator->errors(),
+                    'message' => "Validation Error"
+                ], 422);
             }
+            $getRateLimiterResponse = $this->ensureIsNotRateLimited($request);
+            if($getRateLimiterResponse !== false){
+                return response()->json([
+                    'errors' => [],
+                    'message' => "Too Many Attempts, try after ".ceil($getRateLimiterResponse['seconds'] / 60)." minutes ".$getRateLimiterResponse['seconds']." seconds"
+                ], 422);
+            }
+            if (!$token = JWTAuth::attempt($request->only('email', 'password'), $request->get('remember'))) {
+                RateLimiter::hit($this->throttleKey($request));
+                return response()->json([
+                    'errors' => [],
+                    'message' => "Invalid Login Credentials"
+                ], 422);
+            }
+            RateLimiter::clear($this->throttleKey($request));
         } catch (JWTException $e) {
-            return $this->sendError([], $e->getMessage(), 500);
+            return response()->json([
+                'errors' => [],
+                'message' => $e->getMessage()
+            ], 422);
         }
-        $success = [
+        return response()->json([
+            'errors' => [],
             'token' => $token,
-        ];
-        return $this->sendResponse($success, 'successful login', 200);
+            'message' => 'Logged In Successfully',
+            'redirectUrl' => '/dashboard'
+        ]);
     }
 
     public function getUser(): JsonResponse
@@ -89,44 +142,56 @@ class ClientApiController extends Controller
         return $this->sendResponse($user, "user data retrieved", 200);
     }
     /**
+     *
+     * */
+    public function getJwtToken(Request $request): Response|JsonResponse
+    {
+        if ($request->expectsJson()) {
+            return new JsonResponse(null, 204);
+        }
+
+        return new Response('', 204);
+    }
+
+    /**
      * List of books
      * */
     public function books(Request $request): JsonResponse
     {
-        $sortFields         = ['id','title', 'slug', 'ISBN_10', 'ISBN_13', 'author', 'created_by', 'created_at', 'updated_at'];
-        $PER_PAGE           = 8;
+        $sortFields = ['id', 'title', 'slug', 'ISBN_10', 'ISBN_13', 'author', 'created_by', 'created_at', 'updated_at'];
+        $PER_PAGE = 8;
         $DEFAULT_SORT_FIELD = 'created_at';
         $DEFAULT_SORT_ORDER = 'desc';
         $sortFieldInput = $request->input('sort_field', $DEFAULT_SORT_FIELD);
-        $sortField      = in_array($sortFieldInput, $sortFields) ? $sortFieldInput : $DEFAULT_SORT_ORDER;
-        $sortOrder      = $request->input('sort_order', $DEFAULT_SORT_ORDER);
-        $searchInput    = $request->input('search');
-        $query          = Book::withCount('bookReviews')
-                              ->withAvg('bookReviews', 'rating')
-                              ->with('createdBy:id,name')
-                              ->orderBy($sortField, $sortOrder);
-        $perPage        = $request->input('per_page') ?? $PER_PAGE;
+        $sortField = in_array($sortFieldInput, $sortFields) ? $sortFieldInput : $DEFAULT_SORT_ORDER;
+        $sortOrder = $request->input('sort_order', $DEFAULT_SORT_ORDER);
+        $searchInput = $request->input('search');
+        $query = Book::withCount('bookReviews')
+            ->withAvg('bookReviews', 'rating')
+            ->with('createdBy:id,name')
+            ->orderBy($sortField, $sortOrder);
+        $perPage = $request->input('per_page') ?? $PER_PAGE;
         if (!is_null($searchInput)) {
             $searchQuery = "%$searchInput%";
-            $query       = $query->where('title', 'like', $searchQuery)
+            $query = $query->where('title', 'like', $searchQuery)
                 ->orWhere('slug', 'like', $searchQuery)
                 ->orWhere('ISBN_10', 'like', $searchQuery)
                 ->orWhere('ISBN_13', 'like', $searchQuery)
                 ->orWhere('author', 'like', $searchQuery);
         }
         return response()->json([
-           'pageData'   => $query->paginate((int)$perPage)
+            'pageData' => $query->paginate((int)$perPage)
         ]);
     }
 
     public function getSingleBookData($book_slug): JsonResponse
     {
-        $book = Book::withCount('bookReviews')->withAvg('bookReviews', 'rating')->with('createdBy:id,name')->where('slug',$book_slug)->first();
+        $book = Book::withCount('bookReviews')->withAvg('bookReviews', 'rating')->with('createdBy:id,name')->where('slug', $book_slug)->first();
         return response()->json([
-           'pageData' => [
-               'book' => $book,
-               'bookReviews' => $book->bookReviews()->paginate(10)
-           ]
+            'pageData' => [
+                'book' => $book,
+                'bookReviews' => $book->bookReviews()->paginate(10)
+            ]
         ]);
     }
 }
