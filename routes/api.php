@@ -40,8 +40,8 @@ Route::group([
     Route::post('/login', [ClientApiController::class, 'login'])->name('login');
     Route::post('/getJwtToken', [ClientApiController::class, 'getJwtToken'])->name('getJwtToken');
     Route::post('/register', [ClientApiController::class, 'register'])->name('register');
-    Route::get('/user', [ClientApiController::class, 'getUser'])->name('user');
     Route::middleware('jwt.verify')->group(function() {
+        Route::get('/user', [ClientApiController::class, 'getUser'])->name('user');
         Route::get('/test', function() {
             return response()->json(['message' => 'Welcome to dashboard'], 200);
         })->name('testJwt');
