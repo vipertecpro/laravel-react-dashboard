@@ -37,6 +37,7 @@ Route::group([
     'as' => 'client.',
     'prefix' => 'client'
 ], function () {
+    Route::post('/logout', [ClientApiController::class, 'logout'])->name('logout');
     Route::post('/login', [ClientApiController::class, 'login'])->name('login');
     Route::post('/getJwtToken', [ClientApiController::class, 'getJwtToken'])->name('getJwtToken');
     Route::post('/register', [ClientApiController::class, 'register'])->name('register');

@@ -74,6 +74,7 @@ Route::group([
                 'as' => 'roles.',
                 'prefix' => 'roles'
             ], function () {
+                Route::get('/remove/{id}', [RoleController::class, 'remove'])->name('remove');
                 Route::get('/list', [RoleController::class, 'list'])->name('list');
                 Route::get('/create', [RoleController::class, 'create'])->name('create');
                 Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');

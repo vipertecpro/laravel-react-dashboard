@@ -1,7 +1,5 @@
 ## Laravel-React Dashboard: A Full-Stack Web Application for Book Reviews and User Management
 
----
-
 ## Introduction
 This project is built using Laravel and React, serving as the backend for a 3-tier application architecture. The frontend application is developed using Next.js and can be found [here](https://github.com/vipertecpro/nextjs-app-for-laravel-apis). This backend application provides a comprehensive dashboard for managing book reviews and user roles, as well as a set of APIs to seamlessly connect with the Next.js frontend.
 

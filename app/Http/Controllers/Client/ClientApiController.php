@@ -129,17 +129,49 @@ class ClientApiController extends Controller
         ]);
     }
 
+    /**
+     * @throws ValidationException
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        try {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            JWTAuth::parseToken()->invalidate( true );
+            return response()->json( [
+                'error'   => [],
+                'message' => 'Logged out successfully'
+            ]);
+        } catch (JWTException $e) {
+            return response()->json([
+                'errors' => [],
+                'message' => $e->getMessage()
+            ], 422);
+        }
+    }
+
     public function getUser(): JsonResponse
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if (!$user) {
-                return $this->sendError([], "user not found", 403);
+                return response()->json([
+                    'error'    => [],
+                    'message'  => "user not found",
+                    'user'     => null
+                ],422);
             }
         } catch (JWTException $e) {
-            return $this->sendError([], $e->getMessage(), 500);
+            return response()->json([
+                'error'    => [],
+                'message'  => $e->getMessage(),
+                'user'     => null
+            ],422);
         }
-        return $this->sendResponse($user, "user data retrieved", 200);
+        return response()->json([
+            'message' => "user data retrieved",
+            'user'    => $user
+        ]);
     }
     /**
      *
